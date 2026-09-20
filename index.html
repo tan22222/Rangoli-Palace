@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rangoli Palace booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF6F0;--card:#FFFFFF;--ink:#2B1519;--muted:#6F5A5E;--line:#E8DBD2;--chip:#F5E9DF;
+  --band:#6B1226;--band-ink:#FFF3D6;--gold:#E8B84A;--primary:#6B1226;--on-primary:#FFF3D6;
+  --ok:#1B7A4B;--warn:#B4530F;--bad:#B3261E;--hall:#6B1226;--room:#0F7C76;--focus:#E07B1A;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#170A0E;--card:#26121A;--ink:#F7EBE6;--muted:#C2A9AE;--line:#40252D;--chip:#33191F;
+    --band:#3E0B19;--band-ink:#FFF3D6;--gold:#E8B84A;--primary:#E8B84A;--on-primary:#3E0B19;
+    --ok:#5CCB92;--warn:#F0A25E;--bad:#FF8A80;--hall:#E8B84A;--room:#4FD1C5;--focus:#F28C28;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#170A0E;--card:#26121A;--ink:#F7EBE6;--muted:#C2A9AE;--line:#40252D;--chip:#33191F;
+  --band:#3E0B19;--band-ink:#FFF3D6;--gold:#E8B84A;--primary:#E8B84A;--on-primary:#3E0B19;
+  --ok:#5CCB92;--warn:#F0A25E;--bad:#FF8A80;--hall:#E8B84A;--room:#4FD1C5;--focus:#F28C28;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Mukta","Noto Sans Devanagari","Segoe UI",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.band{background:var(--band);color:var(--band-ink);padding:20px 18px 18px}
+.name{display:block;font-family:"Tiro Devanagari Hindi","Noto Serif Devanagari",Georgia,serif;font-size:32px;line-height:1.2;color:var(--gold)}
+.sub{display:block;font-size:14px;opacity:.85;margin-top:2px}
+.stats{display:flex;gap:32px;margin-top:16px}
+.stats b{display:block;font-size:26px;font-weight:600;line-height:1.1}
+.stats span{font-size:13px;opacity:.85}
+main{max-width:640px;margin:0 auto;padding:16px 14px 120px}
+h2{font-size:20px;font-weight:600;margin:4px 0 12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+.chip{flex:none;border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:6px 14px;font-size:15px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.search{width:100%;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:11px 12px;margin-bottom:14px}
+.bk{display:grid;grid-template-columns:54px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
+.datebox{text-align:center;border-radius:8px;background:var(--chip);padding:6px 0;align-self:start}
+.datebox b{display:block;font-size:24px;line-height:1.1;font-weight:600}
+.datebox span{display:block;font-size:13px;color:var(--muted)}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.top strong{font-size:17px;font-weight:600;line-height:1.3}
+.tag{flex:none;font-size:13px;border-radius:6px;padding:2px 8px;border:1px solid currentColor;color:var(--hall);white-space:nowrap}
+.tag.room{color:var(--room)}
+.meta{font-size:14px;color:var(--muted)}
+.meta a{color:inherit}
+.meta.rm{color:var(--room)}
+.svc{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.svc span{font-size:13px;background:var(--chip);border-radius:6px;padding:1px 8px}
+.money{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:14px;color:var(--muted);margin-top:4px}
+.money b{color:var(--ink);font-weight:600}
+.money .due{color:var(--warn)}.money .due b{color:var(--warn)}
+.money .ok{color:var(--ok)}
+.note{font-size:14px;color:var(--muted);margin-top:6px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 14px;font-size:15px;cursor:pointer}
+.btn.pri{background:var(--primary);color:var(--on-primary);border-color:var(--primary);font-weight:600}
+.btn.bad{color:var(--bad);border-color:var(--bad)}
+.payrow{display:flex;gap:8px;margin-top:10px}
+.payrow input{flex:1;min-width:0}
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.empty .btn{margin-top:12px}
+.hint{font-size:14px;color:var(--muted);margin:16px 2px 0}
+details{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+details p{font-size:14px;color:var(--muted);margin:8px 0}
+textarea,input[type=text],input[type=tel],input[type=number],input[type=date],input[type=password],select{width:100%;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:11px 12px}
+textarea{min-height:84px;resize:vertical}
+label.f{display:block;margin:0 0 14px}
+label.f>span,.lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.pick{position:relative;border:1px solid var(--line);background:var(--chip);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:15px}
+.pick input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pick:has(input:checked){background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.pick:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.attach{border:1px dashed var(--line);border-radius:12px;padding:12px;margin-bottom:14px}
+.attach .picks{margin-bottom:8px}
+.err{border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:15px}
+.err ul{margin:0;padding-left:18px}
+.formacts{display:flex;gap:10px}
+.formacts .btn{flex:1;padding:12px}
+.month{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.month h2{margin:0}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow span{text-align:center;font-size:13px;color:var(--muted)}
+.cell{position:relative;min-height:52px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 0 2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
+.cell.empty{border:0;background:none;cursor:default}
+.cell.today{border-color:var(--focus);border-width:2px}
+.cell.sel{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.dots{display:flex;gap:3px;height:10px;align-items:center;font-style:normal}
+.dots em{display:block;width:6px;height:6px}
+.dh{border-radius:50%;background:var(--hall)}
+.dr{background:var(--room)}
+.cell.sel .dh{background:var(--on-primary)}
+.cell.sel .dr{background:var(--gold)}
+.day{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.day h3{margin:0 0 10px;font-size:17px;font-weight:600}
+.row{display:grid;grid-template-columns:64px 1fr 1fr;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.row .b{color:var(--warn)}.row .fr{color:var(--ok)}
+.rooms{border-top:1px solid var(--line);padding-top:8px;font-size:14px}
+.sset{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.sset h3{margin:0 0 2px;font-size:17px;font-weight:600}
+.hint2{font-size:14px;color:var(--muted);margin:0 0 10px}
+.srow{display:flex;gap:8px;margin-bottom:8px}
+.srow input{flex:1;min-width:0}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{flex:1;padding:14px 2px;background:none;border:0;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer}
+.tabs button[aria-current="page"]{color:var(--primary);box-shadow:inset 0 3px 0 var(--focus)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:15px;max-width:90%;text-align:center}
+@media (prefers-reduced-motion:no-preference){.bk,.day{animation:in .18s ease-out}@keyframes in{from{opacity:.4}to{opacity:1}}}
+.sync{display:block;font-size:13px;margin-top:8px}
+.sync:empty{display:none}
+.sync::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:#9c8a8e}
+.sync.ok::before{background:#5CCB92}.sync.wait::before{background:var(--gold)}.sync.off::before{background:#FF8A80}
+.gate{max-width:420px;margin:0 auto;padding:24px 16px 40px}
+.gate .lcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.showpw{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin:-4px 0 16px}
+.showpw input{width:18px;height:18px;margin:0}
+.who{font-size:14px;color:var(--muted);margin:0 0 10px}
+.rc{background:#fff;color:#222;border:1px solid #d9cfc6;border-radius:10px;padding:18px 16px;font-size:15px;line-height:1.45}
+.rc-h{text-align:center;border-bottom:2px solid #6B1226;padding-bottom:10px;margin-bottom:10px}
+.rc-brand{font-family:"Tiro Devanagari Hindi","Noto Serif Devanagari",Georgia,serif;font-size:28px;color:#6B1226;line-height:1.25}
+.rc-t{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-top:2px}
+.rc-m{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:13px;color:#555;margin-bottom:8px}
+.rc table{width:100%;border-collapse:collapse}
+.rc td{padding:7px 4px;border-bottom:1px solid #eee;vertical-align:top}
+.rc td:first-child{width:38%;color:#555}
+.rc td:last-child{font-weight:600;word-break:break-word}
+.rc-amt{margin-top:14px}
+.rc-amt td{font-size:16px}
+.rc-amt td:first-child{width:auto;white-space:nowrap}
+.rc-amt td:last-child{text-align:right}
+.rc-amt tr.pend td{border-top:2px solid #6B1226;border-bottom:0;color:#6B1226;font-size:18px}
+.rc-f{margin-top:22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;font-size:13px;color:#555}
+.rc-sig{border-top:1px solid #888;padding-top:4px;min-width:130px;text-align:center;flex:none}
+.rcpt-acts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+@media print{
+  .band,.tabs,#toast,#warn,.rcpt-acts,#splash,#login{display:none!important}
+  body{background:#fff}
+  main{max-width:none;padding:0}
+  .rc{border:0;padding:0}
+}
+</style>
+</head>
+<body>
+<header class="band">
+  <span class="name" id="brandName">रंगोली पैलेस</span>
+  <span class="sub">Booking register</span>
+  <span class="sync" id="sync" role="status"></span>
+  <div class="stats" id="stats" hidden>
+    <div><b id="stUp">0</b><span>aane wali bookings</span></div>
+    <div><b id="stBal">₹0</b><span>total baaki raqam</span></div>
+  </div>
+</header>
+
+<div id="splash" class="empty">Load ho raha hai...</div>
+
+<div id="login" class="gate" hidden>
+  <div class="lcard">
+    <h2>Login karo</h2>
+    <p class="hint2">Apna username aur password daalo.</p>
+    <div id="lErr" class="err" role="alert" hidden></div>
+    <form id="loginForm" novalidate>
+      <label class="f"><span>Username</span><input type="text" id="lUser" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+      <label class="f"><span>Password</span><input type="password" id="lPass" autocomplete="current-password"></label>
+      <label class="showpw"><input type="checkbox" id="lShow"> Password dikhao</label>
+      <button type="submit" class="btn pri" id="lBtn" style="width:100%;padding:12px">Login</button>
+    </form>
+  </div>
+</div>
+
+<main id="app" hidden>
+  <div id="warn" class="err" role="alert" hidden></div>
+
+  <section id="v-list">
+    <div class="chips" role="group" aria-label="Filter">
+      <button class="chip" data-act="filter" data-f="up" aria-pressed="true">Aane wali</button>
+      <button class="chip" data-act="filter" data-f="due" aria-pressed="false">Baaki hai</button>
+      <button class="chip" data-act="filter" data-f="past" aria-pressed="false">Purani</button>
+      <button class="chip" data-act="filter" data-f="all" aria-pressed="false">Sab</button>
+    </div>
+    <input class="search" id="q" type="search" placeholder="Naam, phone ya hall se dhundo" aria-label="Search bookings" autocomplete="off">
+    <div id="list"></div>
+    <p class="hint">Bookings online save hoti hain, sab family members ko yahi list dikhti hai. Safety ke liye kabhi kabhi CSV ya Backup le lete raho.</p>
+    <details>
+      <summary>Backup aur export</summary>
+      <p>CSV Excel ya Google Sheets mein khulti hai. Backup text mein bookings aur Settings dono aate hain. Restore karne par jo bookings pehle se hain wo wahi rehti hain, nayi jud jaati hain.</p>
+      <div class="acts">
+        <button class="btn" data-act="csv">CSV download</button>
+        <button class="btn" data-act="bk-make">Backup text banao</button>
+        <button class="btn" data-act="bk-restore">Text se restore karo</button>
+      </div>
+      <textarea id="bk" aria-label="Backup text" placeholder="Backup text yahan dikhega. Restore ke liye yahan paste karo." style="margin-top:10px"></textarea>
+    </details>
+  </section>
+
+  <section id="v-cal" hidden>
+    <div class="month">
+      <button class="btn" data-act="prev" aria-label="Pichla mahina">&lsaquo;</button>
+      <h2 id="calTitle"></h2>
+      <button class="btn" data-act="next" aria-label="Agla mahina">&rsaquo;</button>
+    </div>
+    <div class="dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+    <div class="grid" id="calGrid"></div>
+    <div class="day" id="day"></div>
+  </section>
+
+  <section id="v-form" hidden>
+    <h2 id="formTitle">Nayi booking</h2>
+    <div id="ferr" class="err" role="alert" hidden></div>
+    <form id="f" novalidate autocomplete="off">
+      <div class="seg" role="radiogroup" aria-label="Booking type">
+        <label class="pick"><input type="radio" name="type" value="hall" checked><span>Banquet hall</span></label>
+        <label class="pick"><input type="radio" name="type" value="room"><span>Sirf room</span></label>
+      </div>
+      <label class="f"><span>Customer ka naam</span><input type="text" id="fName"></label>
+      <label class="f"><span>Phone</span><input type="tel" id="fPhone" inputmode="tel"></label>
+      <div class="two">
+        <label class="f"><span>Customer type</span><select id="fCust"></select></label>
+        <label class="f"><span>Event</span><select id="fEvent"></select></label>
+      </div>
+      <div id="gHall" class="two">
+        <label class="f"><span>Date</span><input type="date" id="fDate"></label>
+        <label class="f"><span>Slot</span>
+          <select id="fSlot"><option value="day">Din</option><option value="night">Raat</option><option value="full">Poora din</option></select>
+        </label>
+      </div>
+      <div id="gRoom" class="two" hidden>
+        <label class="f"><span>Check-in</span><input type="date" id="fIn"></label>
+        <label class="f"><span>Check-out</span><input type="date" id="fOut"></label>
+      </div>
+      <div class="lbl" id="unitLbl">Hall chuno</div>
+      <div class="picks" id="units"></div>
+      <div class="attach" id="gAttach">
+        <div class="lbl">Saath mein rooms chahiye? Customer ki zaroorat ke hisab se chuno</div>
+        <div class="picks" id="rmPicks"></div>
+        <div id="gAttDates" class="two" hidden>
+          <label class="f" style="margin:0"><span>Room check-in</span><input type="date" id="fRIn"></label>
+          <label class="f" style="margin:0"><span>Room check-out</span><input type="date" id="fROut"></label>
+        </div>
+      </div>
+      <div class="lbl">Services</div>
+      <div class="picks" id="svc"></div>
+      <div class="two">
+        <label class="f"><span>Total (₹)</span><input type="number" id="fTotal" inputmode="numeric" min="0"></label>
+        <label class="f"><span>Advance mila (₹)</span><input type="number" id="fAdv" inputmode="numeric" min="0"></label>
+      </div>
+      <label class="f"><span>Note</span><textarea id="fNotes"></textarea></label>
+      <div class="formacts">
+        <button type="button" class="btn" data-act="cancel">Cancel</button>
+        <button type="submit" class="btn pri">Booking save karo</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="v-rcpt" hidden>
+    <div class="rcpt-acts">
+      <button class="btn" data-act="rc-back">Wapas</button>
+      <button class="btn pri" data-act="rc-print">Print / PDF</button>
+      <button class="btn" data-act="rc-wa">WhatsApp</button>
+    </div>
+    <div id="rcpt" class="rc"></div>
+  </section>
+
+  <section id="v-set" hidden>
+    <h2>Settings</h2>
+    <div class="sset">
+      <h3>Business ka naam</h3>
+      <p class="hint2">Ye upar header mein dikhta hai.</p>
+      <div class="srow"><input type="text" id="sBrand" aria-label="Business ka naam"></div>
+    </div>
+    <div id="sLists"></div>
+    <p class="hint">Settings sab members ke liye ek hi hain. Ek jagah badlo, sab jagah badal jaati hai.</p>
+    <div class="sset" style="margin-top:14px">
+      <h3>Account</h3>
+      <p class="who" id="who"></p>
+      <button class="btn" data-act="logout">Logout</button>
+    </div>
+  </section>
+</main>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<nav class="tabs" id="tabs" aria-label="Sections" hidden>
+  <button data-view="list" aria-current="page">Bookings</button>
+  <button data-view="cal">Calendar</button>
+  <button data-view="form">Nayi booking</button>
+  <button data-view="set">Settings</button>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager, collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, increment, writeBatch } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAMUI0ZZDaW0BAYEeevD7afXhUxH3RWtyY",
+  authDomain: "rangoli-palace.firebaseapp.com",
+  projectId: "rangoli-palace",
+  storageBucket: "rangoli-palace.firebasestorage.app",
+  messagingSenderId: "325356151051",
+  appId: "1:325356151051:web:607053056c627744d1420e"
+};
+
+(function(){
+  var USER_DOMAIN='@rangolipalace.app';
+  var SLOTS={day:'Din',night:'Raat',full:'Poora din'};
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
+  var $=function(id){return document.getElementById(id)};
+
+  var LISTS=[
+    {key:'halls',title:'Banquet halls',add:'Naya hall jodo',hint:'Naam badalne par purani bookings mein bhi naam badal jaata hai. Jis hall ki booking ho use hata nahi sakte.'},
+    {key:'rooms',title:'Rooms',add:'Naya room jodo',hint:'Naam badalne par purani bookings mein bhi naam badal jaata hai. Jis room ki booking ho use hata nahi sakte.'},
+    {key:'services',title:'Services',add:'Nayi service jodo',hint:'Naam badalne par purani bookings mein bhi badal jaata hai. Hatane se purani bookings par asar nahi padta.'},
+    {key:'events',title:'Event types',add:'Naya event type jodo',hint:'Booking form mein Event ki list yahi hai.'},
+    {key:'custTypes',title:'Customer type',add:'Naya customer type jodo',hint:'Booking form mein Customer type ki list yahi hai.'}
+  ];
+
+  function defaults(){
+    return {brand:'रंगोली पैलेस',
+      halls:['Hall 1','Hall 2','Hall 3'],
+      rooms:['Room 1','Room 2','Room 3','Room 4','Room 5','Room 6','Room 7','Room 8'],
+      services:['Decoration','DJ','Lighting','Sitting','Catering'],
+      events:['Shaadi','Nikah','Engagement','Reception','Birthday','Party','Corporate','Other'],
+      custTypes:['Hindu','Muslim']};
+  }
+  function cleanSettings(s){
+    var d=defaults();
+    if(!s||typeof s!=='object')return d;
+    function arr(k){
+      var a=Array.isArray(s[k])?s[k]:d[k],seen={},out=[];
+      a.forEach(function(x){x=String(x).trim();var l=x.toLowerCase();if(x&&!seen[l]){seen[l]=1;out.push(x)}});
+      return out;
+    }
+    var o={brand:String(s.brand||'').trim()||d.brand,halls:arr('halls'),rooms:arr('rooms'),services:arr('services'),events:arr('events'),custTypes:arr('custTypes')};
+    if(!o.halls.length)o.halls=d.halls;
+    if(!o.rooms.length)o.rooms=d.rooms;
+    return o;
+  }
+
+  function pad(n){return n<10?'0'+n:''+n}
+  function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+  function parse(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)}
+  function today(){return iso(new Date())}
+  function dshort(s){var d=parse(s);return d.getDate()+' '+MON[d.getMonth()]}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function money(n){return '₹'+Math.round(+n||0).toLocaleString('en-IN')}
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+  function bal(b){return Math.max(0,(+b.total||0)-(+b.paid||0))}
+  function nights(a,b){return Math.round((parse(b)-parse(a))/86400000)}
+  function sortBy(a,b){return a.date<b.date?-1:a.date>b.date?1:0}
+  function overlapSlot(a,b){return a==='full'||b==='full'||a===b}
+
+  function stay(b){
+    if(b.type==='room')return {units:b.units,from:b.date,to:b.out};
+    if(b.rooms&&b.rooms.length&&b.rIn&&b.rOut)return {units:b.rooms,from:b.rIn,to:b.rOut};
+    return null;
+  }
+  function endOf(b){
+    var e=b.type==='room'?addDays(b.out,-1):b.date,s=stay(b);
+    if(b.type==='hall'&&s){var l=addDays(s.to,-1);if(l>e)e=l}
+    return e;
+  }
+
+  function clean(x){
+    if(!x||!x.id||!x.name||!DATE_RE.test(String(x.date))||!Array.isArray(x.units)||!x.units.length)return null;
+    var type=x.type==='room'?'room':'hall';
+    if(type==='room'&&!DATE_RE.test(String(x.out)))return null;
+    var rooms=[],rIn='',rOut='';
+    if(type==='hall'&&Array.isArray(x.rooms)&&x.rooms.length&&DATE_RE.test(String(x.rIn))&&DATE_RE.test(String(x.rOut))){
+      rooms=x.rooms.map(String);rIn=String(x.rIn);rOut=String(x.rOut);
+    }
+    return {id:String(x.id),type:type,name:String(x.name),phone:String(x.phone||''),event:String(x.event||''),cust:String(x.cust||''),
+      units:x.units.map(String),
+      services:Array.isArray(x.services)?x.services.map(function(s){s=String(s);return s==='Setting'?'Sitting':s}):[],
+      date:String(x.date),out:type==='room'?String(x.out):'',slot:SLOTS[x.slot]?x.slot:'day',
+      rooms:rooms,rIn:rIn,rOut:rOut,
+      total:+x.total||0,paid:+x.paid||0,notes:String(x.notes||''),by:String(x.by||'')};
+  }
+
+  var app=initializeApp(firebaseConfig);
+  var auth=getAuth(app);
+  var db;
+  try{
+    db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})});
+  }catch(e){db=getFirestore(app)}
+
+  var data=[],settings=defaults(),me='',unsubs=[],lastMeta=null;
+  function bref(id){return doc(db,'bookings',id)}
+  function sref(){return doc(db,'config','settings')}
+
+  function writeFail(e){
+    var c=e&&e.code||'error';
+    toast(c==='permission-denied'?'Save nahi hua: is account ko permission nahi hai.':'Save nahi hua ('+c+'). Internet check karke phir try karo.');
+  }
+  function commit(ops){
+    var jobs=[];
+    for(var i=0;i<ops.length;i+=400){
+      var b=writeBatch(db);
+      ops.slice(i,i+400).forEach(function(o){
+        if(o[0]==='del')b.delete(o[1]);
+        else if(o[3])b.set(o[1],o[2],o[3]);
+        else b.set(o[1],o[2]);
+      });
+      jobs.push(b.commit());
+    }
+    return Promise.all(jobs).catch(writeFail);
+  }
+  function saveBooking(b){return setDoc(bref(b.id),b).catch(writeFail)}
+  function deleteBooking(id){return deleteDoc(bref(id)).catch(writeFail)}
+  function addPayment(id,amt){return updateDoc(bref(id),{paid:increment(amt)}).catch(writeFail)}
+  function saveKey(key){var o={};o[key]=settings[key];return setDoc(sref(),o,{merge:true}).catch(writeFail)}
+
+  function setSync(m){
+    if(m)lastMeta=m;
+    var el=$('sync'),t='',c='';
+    if(!me){el.textContent='';el.className='sync';return}
+    if(!navigator.onLine){t='Offline. Internet aane par sync ho jaayega.';c='off'}
+    else if(lastMeta&&lastMeta.hasPendingWrites){t='Sync ho raha hai...';c='wait'}
+    else if(lastMeta&&lastMeta.fromCache){t='Connect ho raha hai...';c='wait'}
+    else if(lastMeta){t='Live. Sab ke phone par yahi list hai.';c='ok'}
+    el.textContent=t;el.className='sync '+c;
+  }
+  window.addEventListener('online',function(){setSync()});
+  window.addEventListener('offline',function(){setSync()});
+
+  function showWarn(m){var w=$('warn');w.textContent=m;w.hidden=false}
+  function syncError(e){
+    var c=e&&e.code||'error';
+    showWarn(c==='permission-denied'
+      ?'Is account ko data dekhne ki permission nahi hai. Firestore rules check karo.'
+      :'Data load nahi ho pa raha ('+c+'). Internet check karo.');
+  }
+
+  function typing(root){
+    var a=document.activeElement;
+    return !!(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA')&&root.contains(a));
+  }
+  function refresh(){
+    renderStats();
+    if(!typing($('list')))renderList();
+    renderCal();
+    if(view==='set'&&!typing($('sLists'))&&document.activeElement!==$('sBrand'))renderSettings();
+    if(view==='rcpt'){if(data.some(function(x){return x.id===rcptId}))renderReceipt();else setView('list')}
+  }
+
+  function startSync(){
+    stopSync();
+    unsubs.push(onSnapshot(collection(db,'bookings'),{includeMetadataChanges:true},function(snap){
+      data=snap.docs.map(function(d){return clean(Object.assign({},d.data(),{id:d.id}))}).filter(Boolean);
+      $('warn').hidden=true;
+      setSync(snap.metadata);
+      refresh();
+    },syncError));
+    unsubs.push(onSnapshot(sref(),function(snap){
+      settings=cleanSettings(snap.exists()?snap.data():null);
+      applyBrand();
+      refresh();
+    },syncError));
+  }
+  function stopSync(){unsubs.forEach(function(u){try{u()}catch(e){}});unsubs=[];lastMeta=null}
+
+  var view='list',filter='up',q='',editing=null,openPay=null,confirmDel=null,toastTimer=null,rcptId=null;
+  var now=new Date();
+  var cal={y:now.getFullYear(),m:now.getMonth()};
+  var calSel=today();
+
+  function toast(msg){
+    var t=$('toast');t.textContent=msg;t.hidden=false;
+    clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.hidden=true},2600);
+  }
+  function applyBrand(){
+    $('brandName').textContent=settings.brand;
+    document.title=settings.brand+' booking';
+  }
+
+  function conflicts(n,ignore){
+    var out=[],ns=stay(n);
+    data.forEach(function(b){
+      if(b.id===ignore)return;
+      if(n.type==='hall'&&b.type==='hall'){
+        var sh=n.units.filter(function(u){return b.units.indexOf(u)>-1});
+        if(sh.length&&b.date===n.date&&overlapSlot(b.slot,n.slot))
+          out.push(sh.join(', ')+' pehle se booked hai: '+dshort(b.date)+', '+SLOTS[b.slot]+' ('+b.name+')');
+      }
+      var bs=stay(b);
+      if(ns&&bs){
+        var sr=ns.units.filter(function(u){return bs.units.indexOf(u)>-1});
+        if(sr.length&&ns.from<bs.to&&bs.from<ns.to)
+          out.push(sr.join(', ')+' pehle se booked hai: '+dshort(bs.from)+' se '+dshort(bs.to)+' ('+b.name+')');
+      }
+    });
+    return out;
+  }
+
+  function renderStats(){
+    var t=today();
+    $('stUp').textContent=data.filter(function(b){return endOf(b)>=t}).length;
+    $('stBal').textContent=money(data.reduce(function(a,b){return a+bal(b)},0));
+  }
+
+  function card(b){
+    var d=parse(b.date),days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var tag=b.type==='room'?b.units.join(', ')+' · '+nights(b.date,b.out)+' raat':b.units.join(', ')+' · '+SLOTS[b.slot];
+    var head=[b.event||'Event'];
+    if(b.cust)head.push(b.cust);
+    var phone=b.phone?' · <a href="tel:'+esc(b.phone.replace(/[^0-9+]/g,''))+'">'+esc(b.phone)+'</a>':'';
+    var rmLine=b.type==='hall'&&b.rooms.length
+      ?'<div class="meta rm">Rooms: '+esc(b.rooms.join(', '))+' · '+dshort(b.rIn)+' se '+dshort(b.rOut)+' ('+nights(b.rIn,b.rOut)+' raat)</div>':'';
+    var roomLine=b.type==='room'?'<div class="meta rm">'+dshort(b.date)+' se '+dshort(b.out)+'</div>':'';
+    var svc=b.services.length?'<div class="svc">'+b.services.map(function(s){return '<span>'+esc(s)+'</span>'}).join('')+'</div>':'';
+    var due=bal(b),acts;
+    if(confirmDel===b.id){
+      acts='<div class="acts"><span class="meta" style="align-self:center">Pakka delete karein?</span><button class="btn bad" data-act="del-yes" data-id="'+b.id+'">Haan, delete</button><button class="btn" data-act="del-no">Nahi</button></div>';
+    }else{
+      acts='<div class="acts">'+(due>0?'<button class="btn pri" data-act="pay" data-id="'+b.id+'">Payment mila</button>':'')+
+        '<button class="btn" data-act="receipt" data-id="'+b.id+'">Receipt</button>'+
+        '<button class="btn" data-act="edit" data-id="'+b.id+'">Badlo</button>'+
+        '<button class="btn" data-act="del" data-id="'+b.id+'">Delete</button></div>';
+    }
+    var pay=openPay===b.id?'<div class="payrow"><input type="number" inputmode="numeric" min="1" id="pay-'+b.id+'" placeholder="Kitna mila (₹)" aria-label="Payment amount"><button class="btn pri" data-act="pay-add" data-id="'+b.id+'">Jodo</button><button class="btn" data-act="pay-x">X</button></div>':'';
+    return '<article class="bk"><div class="datebox"><b>'+d.getDate()+'</b><span>'+MON[d.getMonth()]+'</span><span>'+days[d.getDay()]+'</span></div><div>'+
+      '<div class="top"><strong>'+esc(b.name)+'</strong><span class="tag'+(b.type==='room'?' room':'')+'">'+esc(tag)+'</span></div>'+
+      '<div class="meta">'+esc(head.join(' · '))+phone+'</div>'+roomLine+rmLine+svc+
+      '<div class="money"><span>Total <b>'+money(b.total)+'</b></span><span>Mila <b>'+money(b.paid)+'</b></span>'+
+      (due>0?'<span class="due">Baaki <b>'+money(due)+'</b></span>':'<span class="ok">Poora mila</span>')+'</div>'+
+      (b.notes?'<div class="note">'+esc(b.notes)+'</div>':'')+(b.by?'<div class="meta" style="font-size:13px;margin-top:4px">Entry: '+esc(b.by)+'</div>':'')+pay+acts+'</div></article>';
+  }
+
+  function renderList(){
+    var t=today(),list=data.slice();
+    if(filter==='up')list=list.filter(function(b){return endOf(b)>=t}).sort(sortBy);
+    else if(filter==='due')list=list.filter(function(b){return bal(b)>0}).sort(sortBy);
+    else if(filter==='past')list=list.filter(function(b){return endOf(b)<t}).sort(sortBy).reverse();
+    else list.sort(sortBy).reverse();
+    if(q){
+      var s=q.toLowerCase();
+      list=list.filter(function(b){
+        return [b.name,b.phone,b.event,b.cust,b.units.join(' '),b.rooms.join(' '),b.notes,b.services.join(' ')].join(' ').toLowerCase().indexOf(s)>-1;
+      });
+    }
+    var el=$('list');
+    if(!list.length){
+      el.innerHTML=data.length
+        ?'<div class="empty">Is filter mein koi booking nahi mili.</div>'
+        :'<div class="empty">Abhi koi booking nahi hai.<br>Diary ki pehli booking yahan likho.<br><button class="btn pri" data-act="new">Nayi booking</button></div>';
+      return;
+    }
+    el.innerHTML=list.map(card).join('');
+    if(openPay){var inp=$('pay-'+openPay);if(inp)inp.focus()}
+  }
+
+  function dayInfo(s){
+    var h=0,r=0;
+    data.forEach(function(b){
+      if(b.type==='hall'&&b.date===s)h+=b.units.length;
+      var st=stay(b);
+      if(st&&st.from<=s&&s<st.to)r+=st.units.length;
+    });
+    return {h:h,r:r};
+  }
+
+  function renderCal(){
+    var y=cal.y,m=cal.m,first=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),t=today(),h='',i;
+    $('calTitle').textContent=MONTHS[m]+' '+y;
+    for(i=0;i<first;i++)h+='<span class="cell empty"></span>';
+    for(var d=1;d<=dim;d++){
+      var s=iso(new Date(y,m,d)),inf=dayInfo(s);
+      var lab=d+' '+MONTHS[m]+(inf.h?', '+inf.h+' hall':'')+(inf.r?', '+inf.r+' room':'');
+      var dots='';
+      for(i=0;i<Math.min(inf.h,3);i++)dots+='<em class="dh"></em>';
+      if(inf.r)dots+='<em class="dr"></em>';
+      h+='<button class="cell'+(s===t?' today':'')+(s===calSel?' sel':'')+'" data-act="pick-day" data-date="'+s+'" aria-label="'+lab+'"><span>'+d+'</span><i class="dots">'+dots+'</i></button>';
+    }
+    $('calGrid').innerHTML=h;
+    renderDay();
+  }
+
+  function renderDay(){
+    var s=calSel,d=parse(s);
+    var title=d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+    function at(hall,slot){
+      return data.filter(function(b){return b.type==='hall'&&b.date===s&&b.units.indexOf(hall)>-1&&overlapSlot(b.slot,slot)})[0];
+    }
+    function cellTxt(label,b){
+      return '<span class="'+(b?'b':'fr')+'">'+label+': '+(b?esc(b.name):'khaali')+'</span>';
+    }
+    var rows=settings.halls.map(function(hn){
+      return '<div class="row"><b>'+esc(hn)+'</b>'+cellTxt('Din',at(hn,'day'))+cellTxt('Raat',at(hn,'night'))+'</div>';
+    }).join('');
+    var rb=data.filter(function(b){var st=stay(b);return st&&st.from<=s&&s<st.to});
+    var used={};
+    rb.forEach(function(b){stay(b).units.forEach(function(u){used[u]=1})});
+    var n=Object.keys(used).length,free=Math.max(0,settings.rooms.length-n);
+    var rtxt='<div class="rooms"><b>Rooms:</b> '+n+' booked, '+free+' khaali'+
+      (rb.length?'<br>'+rb.map(function(b){return esc(b.name)+' ('+esc(stay(b).units.join(', '))+(b.type==='hall'?', hall ke saath':'')+')'}).join('<br>'):'')+'</div>';
+    $('day').innerHTML='<h3>'+esc(title)+'</h3>'+rows+rtxt+
+      '<div class="acts"><button class="btn pri" data-act="book-day" data-date="'+s+'">Is date par booking karo</button></div>';
+  }
+
+  function renderSettings(){
+    $('sBrand').value=settings.brand;
+    var h='';
+    LISTS.forEach(function(L){
+      var items=settings[L.key];
+      h+='<div class="sset"><h3>'+esc(L.title)+'</h3><p class="hint2">'+esc(L.hint)+'</p>';
+      items.forEach(function(v,i){
+        h+='<div class="srow"><input type="text" class="sin" data-list="'+L.key+'" data-i="'+i+'" value="'+esc(v)+'" aria-label="'+esc(L.title+' ka naam')+'">'+
+          '<button class="btn" data-act="s-del" data-list="'+L.key+'" data-i="'+i+'" aria-label="'+esc(v)+' hatao">Hatao</button></div>';
+      });
+      if(!items.length)h+='<p class="hint2">Abhi kuch nahi hai.</p>';
+      h+='<div class="srow"><input type="text" id="add-'+L.key+'" placeholder="'+esc(L.add)+'" aria-label="'+esc(L.add)+'">'+
+        '<button class="btn pri" data-act="s-add" data-list="'+L.key+'">Jodo</button></div></div>';
+    });
+    $('sLists').innerHTML=h;
+  }
+
+  function setView(v){
+    view=v;
+    $('v-list').hidden=v!=='list';
+    $('v-cal').hidden=v!=='cal';
+    $('v-form').hidden=v!=='form';
+    $('v-set').hidden=v!=='set';
+    $('v-rcpt').hidden=v!=='rcpt';
+    Array.prototype.forEach.call(document.querySelectorAll('.tabs button'),function(b){
+      if(b.getAttribute('data-view')===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+    });
+    window.scrollTo(0,0);
+  }
+  function renderAll(){renderStats();renderList();renderCal()}
+
+  function pickHtml(name,arr,sel){
+    return arr.map(function(u){
+      return '<label class="pick"><input type="checkbox" name="'+name+'" value="'+esc(u)+'"'+(sel.indexOf(u)>-1?' checked':'')+'><span>'+esc(u)+'</span></label>';
+    }).join('');
+  }
+  function withExtra(list,extra){
+    var out=list.slice();
+    (extra||[]).forEach(function(x){if(x&&out.indexOf(x)<0)out.push(x)});
+    return out;
+  }
+  function selectHtml(list,cur,blank){
+    return (blank?'<option value="">Chuno</option>':'')+list.map(function(v){
+      return '<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(v)+'</option>';
+    }).join('');
+  }
+  function showType(type,sel,rmSel){
+    $('gHall').hidden=type!=='hall';
+    $('gRoom').hidden=type!=='room';
+    $('gAttach').hidden=type!=='hall';
+    $('unitLbl').textContent=type==='hall'?'Hall chuno':'Room chuno';
+    $('units').innerHTML=pickHtml('unit',type==='hall'?settings.halls:settings.rooms,sel||[]);
+    $('rmPicks').innerHTML=pickHtml('rm',settings.rooms,rmSel||[]);
+    $('gAttDates').hidden=!(rmSel&&rmSel.length);
+  }
+  function syncAttach(){
+    var any=document.querySelectorAll('input[name=rm]:checked').length>0;
+    $('gAttDates').hidden=!any;
+    if(any){
+      if(!$('fRIn').value&&$('fDate').value)$('fRIn').value=$('fDate').value;
+      if(!$('fROut').value&&$('fRIn').value)$('fROut').value=addDays($('fRIn').value,1);
+    }
+  }
+
+  function openForm(o){
+    o=o||{};
+    var b=o.edit||null;
+    editing=b?b.id:null;
+    $('formTitle').textContent=b?'Booking badlo':'Nayi booking';
+    $('ferr').hidden=true;
+    var type=b?b.type:'hall';
+    document.querySelector('input[name=type][value='+type+']').checked=true;
+    $('fEvent').innerHTML=selectHtml(withExtra(settings.events,b?[b.event]:[]),b?b.event:'',false);
+    $('fCust').innerHTML=selectHtml(withExtra(settings.custTypes,b?[b.cust]:[]),b?b.cust:'',true);
+    $('fName').value=b?b.name:'';
+    $('fPhone').value=b?b.phone:'';
+    $('fDate').value=b&&b.type==='hall'?b.date:(o.date||'');
+    $('fSlot').value=b&&b.type==='hall'?b.slot:'day';
+    $('fIn').value=b&&b.type==='room'?b.date:(o.date||'');
+    $('fOut').value=b&&b.type==='room'?b.out:(o.date?addDays(o.date,1):'');
+    $('fRIn').value=b&&b.rooms.length?b.rIn:'';
+    $('fROut').value=b&&b.rooms.length?b.rOut:'';
+    $('fTotal').value=b&&b.total?b.total:'';
+    $('fAdv').value=b&&b.paid?b.paid:'';
+    $('fNotes').value=b?b.notes:'';
+    $('svc').innerHTML=pickHtml('svc',withExtra(settings.services,b?b.services:[]),b?b.services:[]);
+    showType(type,b?b.units:[],b&&b.type==='hall'?b.rooms:[]);
+    setView('form');
+  }
+
+  function checked(name){
+    return Array.prototype.map.call(document.querySelectorAll('input[name='+name+']:checked'),function(i){return i.value});
+  }
+
+  function submitForm(){
+    var type=document.querySelector('input[name=type]:checked').value;
+    var units=checked('unit'),svc=checked('svc'),rooms=type==='hall'?checked('rm'):[];
+    var nb={id:editing||uid(),type:type,name:$('fName').value.trim(),phone:$('fPhone').value.trim(),event:$('fEvent').value,cust:$('fCust').value,
+      units:units,services:svc,total:+$('fTotal').value||0,paid:+$('fAdv').value||0,notes:$('fNotes').value.trim(),
+      out:'',slot:'day',rooms:[],rIn:'',rOut:''};
+    if(type==='hall'){
+      nb.date=$('fDate').value;nb.slot=$('fSlot').value;
+      if(rooms.length){nb.rooms=rooms;nb.rIn=$('fRIn').value;nb.rOut=$('fROut').value}
+    }else{nb.date=$('fIn').value;nb.out=$('fOut').value}
+    var errs=[];
+    if(!nb.name)errs.push('Customer ka naam likho.');
+    if(!nb.date)errs.push(type==='hall'?'Date chuno.':'Check-in date chuno.');
+    if(type==='room'){
+      if(!nb.out)errs.push('Check-out date chuno.');
+      else if(nb.date&&nb.out<=nb.date)errs.push('Check-out date check-in ke baad honi chahiye.');
+    }
+    if(!units.length)errs.push(type==='hall'?'Kam se kam ek hall chuno.':'Kam se kam ek room chuno.');
+    if(rooms.length){
+      if(!nb.rIn||!nb.rOut)errs.push('Rooms ki check-in aur check-out date chuno.');
+      else if(nb.rOut<=nb.rIn)errs.push('Room check-out date check-in ke baad honi chahiye.');
+    }
+    if(nb.paid>nb.total)errs.push('Advance total se zyada nahi ho sakta.');
+    if(!errs.length)errs=errs.concat(conflicts(nb,editing));
+    var box=$('ferr');
+    if(errs.length){
+      box.innerHTML='<ul>'+errs.map(function(e){return '<li>'+esc(e)+'</li>'}).join('')+'</ul>';
+      box.hidden=false;
+      box.scrollIntoView({block:'center'});
+      return;
+    }
+    var old=editing?data.filter(function(b){return b.id===editing})[0]:null;
+    nb.by=old&&old.by?old.by:me;
+    if(editing)data=data.map(function(b){return b.id===editing?nb:b});
+    else data.push(nb);
+    saveBooking(nb);
+    editing=null;
+    filter=endOf(nb)<today()?'all':'up';
+    Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',c.getAttribute('data-f')===filter?'true':'false')});
+    q='';$('q').value='';
+    calSel=nb.date;
+    var pd=parse(nb.date);cal={y:pd.getFullYear(),m:pd.getMonth()};
+    renderAll();setView('list');
+    toast('Booking save ho gayi');
+  }
+
+  function renameEverywhere(key,oldV,newV){
+    var changed=[];
+    function mapArr(a){return a.map(function(x){return x===oldV?newV:x})}
+    data.forEach(function(b){
+      var before=JSON.stringify(b);
+      if(key==='halls'&&b.type==='hall')b.units=mapArr(b.units);
+      else if(key==='rooms'){
+        if(b.type==='room')b.units=mapArr(b.units);
+        else b.rooms=mapArr(b.rooms);
+      }
+      else if(key==='services')b.services=mapArr(b.services);
+      else if(key==='events'&&b.event===oldV)b.event=newV;
+      else if(key==='custTypes'&&b.cust===oldV)b.cust=newV;
+      if(JSON.stringify(b)!==before)changed.push(b);
+    });
+    return changed;
+  }
+  function isUsed(key,name){
+    return data.some(function(b){
+      if(key==='halls')return b.type==='hall'&&b.units.indexOf(name)>-1;
+      if(key==='rooms')return (b.type==='room'&&b.units.indexOf(name)>-1)||(b.type==='hall'&&b.rooms.indexOf(name)>-1);
+      return false;
+    });
+  }
+  function renameItem(input){
+    var key=input.getAttribute('data-list'),i=+input.getAttribute('data-i');
+    var oldV=settings[key][i],nv=input.value.trim();
+    if(!nv){input.value=oldV;toast('Naam khaali nahi ho sakta');return}
+    if(nv===oldV)return;
+    var dup=settings[key].some(function(x,j){return j!==i&&x.toLowerCase()===nv.toLowerCase()});
+    if(dup){input.value=oldV;toast('Ye naam pehle se hai');return}
+    settings[key][i]=nv;
+    var ch=renameEverywhere(key,oldV,nv);
+    var so={};so[key]=settings[key];
+    commit(ch.map(function(b){return ['set',bref(b.id),b]}).concat([['set',sref(),so,{merge:true}]]));
+    renderAll();
+    toast('Naam badal gaya');
+  }
+  function addItem(key){
+    var inp=$('add-'+key),nv=inp.value.trim();
+    if(!nv){toast('Pehle naam likho');return}
+    if(settings[key].some(function(x){return x.toLowerCase()===nv.toLowerCase()})){toast('Ye pehle se hai');return}
+    settings[key].push(nv);
+    saveKey(key);renderSettings();renderAll();
+    toast('Jud gaya: '+nv);
+  }
+  function delItem(key,i){
+    var name=settings[key][i];
+    if(isUsed(key,name)){toast(name+' ki bookings hain. Pehle unhe badlo ya delete karo.');return}
+    if((key==='halls'||key==='rooms')&&settings[key].length<=1){toast('Kam se kam ek '+(key==='halls'?'hall':'room')+' rakhna zaroori hai');return}
+    settings[key].splice(i,1);
+    saveKey(key);renderSettings();renderAll();
+    toast('Hata diya: '+name);
+  }
+
+  var RSLOT={day:'Day',night:'Night',full:'Full day'};
+  var WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  function dfull(s){var d=parse(s);return WD[d.getDay()]+', '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear()}
+  function plural(n,w){return n+' '+w+(n===1?'':'s')}
+  function rcptNo(b){return 'RP-'+String(b.id).slice(-6).toUpperCase()}
+  function receiptRows(b){
+    var isHall=b.type==='hall',rooms=isHall?b.rooms:b.units;
+    var when=isHall?dfull(b.date)+' ('+RSLOT[b.slot]+')'
+      :dfull(b.date)+' to '+dfull(b.out)+' ('+plural(nights(b.date,b.out),'night')+')';
+    var rm='None';
+    if(rooms.length){
+      rm=plural(rooms.length,'room')+': '+rooms.join(', ');
+      if(isHall)rm+=' ('+dshort(b.rIn)+' to '+dshort(b.rOut)+', '+plural(nights(b.rIn,b.rOut),'night')+')';
+    }
+    return [
+      ['Customer Name',b.name],['Phone',b.phone||'-'],['Event',b.event||'-'],
+      ['Booking Date',when],
+      ['Hall',isHall?b.units.join(', '):'None'],['Rooms',rm],
+      ['Services',b.services.length?b.services.join(', '):'None']
+    ];
+  }
+  function renderReceipt(){
+    var b=data.filter(function(x){return x.id===rcptId})[0];
+    if(!b)return;
+    var t=today(),rows=receiptRows(b).map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td></tr>'}).join('');
+    $('rcpt').innerHTML=
+      '<div class="rc-h"><div class="rc-brand">'+esc(settings.brand)+'</div><div class="rc-t">Booking Receipt</div></div>'+
+      '<div class="rc-m"><span>Receipt No: '+esc(rcptNo(b))+'</span><span>Date: '+esc(dshort(t)+' '+parse(t).getFullYear())+'</span></div>'+
+      '<table>'+rows+'</table>'+
+      '<table class="rc-amt"><tr><td>Total Amount</td><td>'+money(b.total)+'</td></tr>'+
+      '<tr><td>Advance / Paid</td><td>'+money(b.paid)+'</td></tr>'+
+      '<tr class="pend"><td>Pending Amount</td><td>'+money(bal(b))+'</td></tr></table>'+
+      '<div class="rc-f"><span>Thank you for choosing '+esc(settings.brand)+'.</span><span class="rc-sig">Authorised Signature</span></div>';
+  }
+  function receiptText(b){
+    var L=['*'+settings.brand+'*','Booking Receipt','Receipt No: '+rcptNo(b),''];
+    receiptRows(b).forEach(function(r){L.push(r[0]+': '+r[1])});
+    L.push('','Total Amount: '+money(b.total),'Advance / Paid: '+money(b.paid),'Pending Amount: '+money(bal(b)),'','Thank you for choosing '+settings.brand+'.');
+    return L.join('\n');
+  }
+  function waNumber(p){
+    var d=String(p||'').replace(/\D/g,'');
+    if(d.length===10)return '91'+d;
+    if(d.length===11&&d.charAt(0)==='0')return '91'+d.slice(1);
+    return d;
+  }
+  function shareReceipt(){
+    var b=data.filter(function(x){return x.id===rcptId})[0];
+    if(!b)return;
+    window.open('https://wa.me/'+waNumber(b.phone)+'?text='+encodeURIComponent(receiptText(b)),'_blank');
+  }
+
+  function csvText(){
+    var h=['Date','Check-out','Type','Units','Slot','Customer','Phone','Customer type','Event','Services','Rooms with hall','Room check-in','Room check-out','Total','Paid','Balance','Notes'];
+    var rows=data.slice().sort(sortBy).map(function(b){
+      return [b.date,b.out,b.type==='hall'?'Hall':'Room',b.units.join(' + '),b.type==='hall'?SLOTS[b.slot]:'',b.name,b.phone,b.cust,b.event,b.services.join(' + '),b.rooms.join(' + '),b.rIn,b.rOut,b.total,b.paid,bal(b),b.notes];
+    });
+    return [h].concat(rows).map(function(r){
+      return r.map(function(c){return '"'+String(c==null?'':c).replace(/"/g,'""')+'"'}).join(',');
+    }).join('\n');
+  }
+  function exportCsv(){
+    try{
+      var blob=new Blob(['\uFEFF'+csvText()],{type:'text/csv;charset=utf-8'});
+      var url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download='rangoli-palace-bookings.csv';
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);a.remove()},1000);
+      toast('CSV download ho gayi');
+    }catch(e){
+      $('bk').value=csvText();
+      toast('Download nahi hua. CSV neeche text mein hai, copy kar lo.');
+    }
+  }
+  function restore(){
+    try{
+      var obj=JSON.parse($('bk').value),list=Array.isArray(obj)?obj:obj.bookings;
+      if(!Array.isArray(list))throw new Error('bad');
+      var ops=[],n=0,seen={};
+      data.forEach(function(y){seen[y.id]=1});
+      list.forEach(function(x){
+        var c=clean(x);
+        if(c&&!seen[c.id]){seen[c.id]=1;c.by=c.by||me;ops.push(['set',bref(c.id),c]);n++}
+      });
+      if(!Array.isArray(obj)&&obj.settings)ops.push(['set',sref(),cleanSettings(obj.settings),{merge:true}]);
+      if(!ops.length){toast('Restore karne ke liye kuch naya nahi mila');return}
+      commit(ops);
+      toast(n+' booking judi');
+    }catch(e){toast('Text sahi nahi hai. Sirf backup text paste karo.')}
+  }
+
+  document.addEventListener('click',function(e){
+    var tab=e.target.closest('.tabs button');
+    if(tab){
+      var v=tab.getAttribute('data-view');
+      if(v==='form')openForm();
+      else{
+        if(v==='set')renderSettings();
+        setView(v);
+        if(v!=='set')renderAll();
+      }
+      return;
+    }
+    var t=e.target.closest('[data-act]');
+    if(!t)return;
+    var act=t.getAttribute('data-act'),id=t.getAttribute('data-id');
+    var b=id?data.filter(function(x){return x.id===id})[0]:null;
+    if(act==='filter'){
+      filter=t.getAttribute('data-f');
+      Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',c===t?'true':'false')});
+      renderList();
+    }
+    else if(act==='new')openForm();
+    else if(act==='receipt'&&b){rcptId=b.id;renderReceipt();setView('rcpt')}
+    else if(act==='rc-back')setView('list');
+    else if(act==='rc-print')window.print();
+    else if(act==='rc-wa')shareReceipt();
+    else if(act==='edit'&&b)openForm({edit:b});
+    else if(act==='del'){confirmDel=id;openPay=null;renderList()}
+    else if(act==='del-no'){confirmDel=null;renderList()}
+    else if(act==='del-yes'){data=data.filter(function(x){return x.id!==id});confirmDel=null;deleteBooking(id);renderAll();toast('Booking delete ho gayi')}
+    else if(act==='pay'){openPay=id;confirmDel=null;renderList()}
+    else if(act==='pay-x'){openPay=null;renderList()}
+    else if(act==='pay-add'&&b){
+      var amt=+($('pay-'+id).value)||0;
+      if(amt<=0){toast('Amount likho');return}
+      b.paid=(+b.paid||0)+amt;
+      openPay=null;addPayment(b.id,amt);renderAll();toast(money(amt)+' jud gaye');
+    }
+    else if(act==='prev'){cal.m--;if(cal.m<0){cal.m=11;cal.y--}renderCal()}
+    else if(act==='next'){cal.m++;if(cal.m>11){cal.m=0;cal.y++}renderCal()}
+    else if(act==='pick-day'){calSel=t.getAttribute('data-date');renderCal()}
+    else if(act==='book-day')openForm({date:t.getAttribute('data-date')});
+    else if(act==='cancel'){editing=null;setView('list')}
+    else if(act==='logout'){signOut(auth).then(function(){toast('Logout ho gaya')})}
+    else if(act==='csv')exportCsv();
+    else if(act==='bk-make'){$('bk').value=JSON.stringify({v:2,settings:settings,bookings:data});toast('Backup text taiyar hai. Ise copy karke sambhal lo.')}
+    else if(act==='bk-restore')restore();
+    else if(act==='s-add')addItem(t.getAttribute('data-list'));
+    else if(act==='s-del')delItem(t.getAttribute('data-list'),+t.getAttribute('data-i'));
+  });
+
+  document.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.name==='type')showType(t.value,[],[]);
+    else if(t.name==='rm')syncAttach();
+    else if(t.id==='lShow')$('lPass').type=t.checked?'text':'password';
+    else if(t.classList&&t.classList.contains('sin'))renameItem(t);
+    else if(t.id==='sBrand'){
+      var v=t.value.trim();
+      if(!v){t.value=settings.brand;toast('Naam khaali nahi ho sakta');return}
+      settings.brand=v;saveKey('brand');applyBrand();toast('Naam badal gaya');
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var t=e.target;
+    if(t.id&&t.id.indexOf('add-')===0){e.preventDefault();addItem(t.id.slice(4))}
+    else if((t.classList&&t.classList.contains('sin'))||t.id==='sBrand'){e.preventDefault();t.blur()}
+  });
+  $('q').addEventListener('input',function(){q=this.value.trim();renderList()});
+  $('f').addEventListener('submit',function(e){e.preventDefault();submitForm()});
+
+  function showApp(on){
+    $('splash').hidden=true;
+    $('login').hidden=on;
+    $('app').hidden=!on;
+    $('tabs').hidden=!on;
+    $('stats').hidden=!on;
+    if(on){applyBrand();renderAll();setView('list')}
+  }
+
+  function loginMsg(code){
+    if(code==='auth/network-request-failed')return 'Internet nahi chal raha. Check karke phir try karo.';
+    if(code==='auth/too-many-requests')return 'Bahut baar galat try ho gaya. Thodi der baad phir try karo.';
+    if(code==='auth/user-disabled')return 'Ye account band hai. Admin se poochho.';
+    if(code==='auth/invalid-credential'||code==='auth/wrong-password'||code==='auth/user-not-found'||code==='auth/invalid-email')
+      return 'Username ya password galat hai.';
+    return 'Login nahi ho paya ('+code+').';
+  }
+  $('loginForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var u=$('lUser').value.trim().toLowerCase().replace(/\s+/g,''),p=$('lPass').value,er=$('lErr'),btn=$('lBtn');
+    er.hidden=true;
+    if(!/^[a-z0-9._-]{2,30}$/.test(u)||!p){
+      er.textContent='Username aur password dono likho. Username mein sirf a-z, 0-9, . _ - chalta hai.';er.hidden=false;return;
+    }
+    btn.disabled=true;btn.textContent='Ruko...';
+    signInWithEmailAndPassword(auth,u+USER_DOMAIN,p).then(function(){$('lPass').value=''}).catch(function(err){
+      er.textContent=loginMsg(err&&err.code||'error');er.hidden=false;
+    }).then(function(){btn.disabled=false;btn.textContent='Login'});
+  });
+
+  onAuthStateChanged(auth,function(u){
+    if(u){
+      me=String(u.email||'').replace(USER_DOMAIN,'');
+      $('who').textContent='Login: '+me;
+      showApp(true);
+      startSync();
+      setSync();
+    }else{
+      stopSync();me='';data=[];settings=defaults();
+      setSync();
+      showApp(false);
+    }
+  },function(){$('splash').hidden=true;$('login').hidden=false});
+})();
+</script>
+</body>
+</html>
